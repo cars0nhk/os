@@ -16,9 +16,11 @@ int main(int argc, char *argv[])
     //prepare pipe
     for(i=0;i<num_child;i++){
         if(ppid == pid){
+            //pipe for parent to child
             if(pipe(fd[i])<0){
                 printf("Fail to create pipe");
             }
+            //pipe for child to parent
             if(pipe(fdtwo[i])<0){
                 printf("Fail to create pipe");
             }
