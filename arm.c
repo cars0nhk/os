@@ -44,28 +44,30 @@ int main(int argc, char *argv[])
             printf("%d ",cid[i]);
         printf("\n");
         int quit=0;
+        
         while(quit==0){
+            
             char *s = (char*) malloc( 100 );
             scanf("%s",s);
             //call child
-            if(strstr(s, "quit") != NULL){
-                break;
+            if(strstr(s, "QUIT") != NULL){
+                exit(0);
             }
             for (i=0; i<num_child; i++) {
                 write(fd[i][1],s,100);
             }
         }
-
-            }else{
+        
+    }else{
         //Child process
         while(1){
             //read command
             char command[80];
             read(fd[child_id][0], command, 80);
-            if(strstr(command, "printhihi") != NULL){
+            if(strstr(command, "PRINTHIHI") != NULL){
                 printf("hihi,im child %d\n",pid);
             }
-            if(strstr(command, "printbyebye") != NULL){
+            if(strstr(command, "PRINTBYEBYE") != NULL){
                 printf("byebye,im child %d\n",pid);
             }
         }
