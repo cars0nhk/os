@@ -38,24 +38,32 @@ int main(int argc, char *argv[])
     pid = getpid();
     if(ppid == pid){
         //parent process
-        printf("Parent: all child id:");
-        //print child id
-        for (i=0;i<num_child;i++)
-            printf("%d ",cid[i]);
-        printf("\n");
         int quit=0;
         
         while(quit==0){
-            
             char *s = (char*) malloc( 100 );
-            scanf("%s",s);
+            printf("Please enter appointment:\n");
+            fgets(s, 100, stdin);
             //call child
-            if(strstr(s, "QUIT") != NULL){
+            if(strstr(s, "endProgram") != NULL){
+                printf("Bye!");
                 exit(0);
             }
-            for (i=0; i<num_child; i++) {
-                write(fd[i][1],s,100);
+            int target_child=-1;
+            for (i=0;i<num_child;i++){
+                if(strstr(s, argv[i+1]) != NULL){
+                    target_child = i;
+                }
             }
+            write(fd[target_child][1],s,100);
+            while (1) {
+                char command[80];
+                read(fdtwo[0][0], command, 80);
+                if(strstr(command, "DONE") != NULL){
+                    break;
+                }
+            }
+
         }
         
     }else{
@@ -64,11 +72,29 @@ int main(int argc, char *argv[])
             //read command
             char command[80];
             read(fd[child_id][0], command, 80);
-            if(strstr(command, "PRINTHIHI") != NULL){
-                printf("hihi,im child %d\n",pid);
+            if(strstr(command, "addStudy") != NULL){
+                printf("addStudy,im %s\n",argv[child_id+1]);
+                write(fdtwo[0][1],"DONE",4);
             }
-            if(strstr(command, "PRINTBYEBYE") != NULL){
-                printf("byebye,im child %d\n",pid);
+            if(strstr(command, "addAssignment") != NULL){
+                printf("addAssignment,im %s\n",argv[child_id+1]);
+                write(fdtwo[0][1],"DONE",4);
+            }
+            if(strstr(command, "addProject") != NULL){
+                printf("addProject,im %s\n",argv[child_id+1]);
+                write(fdtwo[0][1],"DONE",4);
+            }
+            if(strstr(command, "addGathering") != NULL){
+                printf("addGathering,im %s\n",argv[child_id+1]);
+                write(fdtwo[0][1],"DONE",4);
+            }
+            if(strstr(command, "addBatch") != NULL){
+                printf("addBatch,im %s\n",argv[child_id+1]);
+                write(fdtwo[0][1],"DONE",4);
+            }
+            if(strstr(command, "printSchd") != NULL){
+                printf("printSchd,im %s\n",argv[child_id+1]);
+                write(fdtwo[0][1],"DONE",4);
             }
         }
         
