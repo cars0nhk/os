@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-
+#include <ctype.h>
 int main(int argc, char *argv[])
 {
     if (argc<4||argc>11)
@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     }
         printf("~~WELCOME TO AMR~~\n");
     int num_child = argc-1;
-    int i;
+    int i,j;
     int cid[num_child];
     int fd[num_child][2];
     int fdtwo[num_child][2];
@@ -22,6 +22,10 @@ int main(int argc, char *argv[])
     char *username[argc];
     for (i=0; i<num_child; i++) {
         username[i] = argv[i+1];
+        for(j = 0; username[i][j]; j++){
+            username[i][j] = tolower(username[i][j]);
+        }
+        username[i][0] = toupper(username[i][0]);
     }
     //prepare pipe
     for(i=0;i<num_child;i++){
@@ -66,12 +70,17 @@ int main(int argc, char *argv[])
                         target_child = i;
                     }
                 }
-                write(fd[target_child][1],s,100);
-                while (1) {
-                    char command[80];
-                    read(fdtwo[0][0], command, 80);
-                    if(strstr(command, "DONE") != NULL){
-                        break;
+                if (target_child == -1){
+                    printf("User not exist, please try again.\n");
+                }
+                else{
+                    write(fd[target_child][1],s,100);
+                    while (1) {
+                        char command[80];
+                        read(fdtwo[0][0], command, 80);
+                        if(strstr(command, "DONE") != NULL){
+                            break;
+                        }
                     }
                 }
             }
