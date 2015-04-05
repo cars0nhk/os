@@ -5,6 +5,12 @@
 
 int main(int argc, char *argv[])
 {
+    if (argc<4||argc>11)
+    {
+        printf("Number of user between 3-10.\n");
+        exit(1);
+    }
+        printf("~~WELCOME TO AMR~~\n");
     int num_child = argc-1;
     int i;
     int cid[num_child];
@@ -13,6 +19,10 @@ int main(int argc, char *argv[])
     int ppid = getpid();
     int pid = ppid;
     int child_id = 0;
+    char *username[argc];
+    for (i=0; i<num_child; i++) {
+        username[i] = argv[i+1];
+    }
     //prepare pipe
     for(i=0;i<num_child;i++){
         if(ppid == pid){
@@ -50,20 +60,52 @@ int main(int argc, char *argv[])
                 exit(0);
             }
             int target_child=-1;
-            for (i=0;i<num_child;i++){
-                if(strstr(s, argv[i+1]) != NULL){
+            if(strstr(s, "addStudy") != NULL||strstr(s, "addAssignment") != NULL||strstr(s, "addBatch") != NULL){
+                for (i=0;i<num_child;i++){
+                    if(strstr(s, argv[i+1]) != NULL){
+                        target_child = i;
+                    }
+                }
+                write(fd[target_child][1],s,100);
+                while (1) {
+                    char command[80];
+                    read(fdtwo[0][0], command, 80);
+                    if(strstr(command, "DONE") != NULL){
+                        break;
+                    }
+                }
+            }
+            else if(strstr(s, "addProject") != NULL||strstr(s, "addGathering") != NULL){
+                for (i=0;i<num_child;i++){
+                    if(strstr(s, argv[i+1]) != NULL){
+                        target_child = i;
+                        write(fd[target_child][1],s,100);
+                        while (1) {
+                            char command[80];
+                            read(fdtwo[0][0], command, 80);
+                            if(strstr(command, "DONE") != NULL){
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else if(strstr(s, "printSchd") != NULL){
+                for (i=0;i<num_child;i++){
                     target_child = i;
+                    write(fd[target_child][1],s,100);
+                    while (1) {
+                        char command[80];
+                        read(fdtwo[0][0], command, 80);
+                        if(strstr(command, "DONE") != NULL){
+                            break;
+                        }
+                    }
                 }
             }
-            write(fd[target_child][1],s,100);
-            while (1) {
-                char command[80];
-                read(fdtwo[0][0], command, 80);
-                if(strstr(command, "DONE") != NULL){
-                    break;
-                }
+            else{
+                printf("Command not exist, please try again.\n");
             }
-
         }
         
     }else{
@@ -73,28 +115,31 @@ int main(int argc, char *argv[])
             char command[80];
             read(fd[child_id][0], command, 80);
             if(strstr(command, "addStudy") != NULL){
-                printf("addStudy,im %s\n",argv[child_id+1]);
+                printf("addStudy,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
-            if(strstr(command, "addAssignment") != NULL){
-                printf("addAssignment,im %s\n",argv[child_id+1]);
+            else if(strstr(command, "addAssignment") != NULL){
+                printf("addAssignment,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
-            if(strstr(command, "addProject") != NULL){
-                printf("addProject,im %s\n",argv[child_id+1]);
+            else if(strstr(command, "addProject") != NULL){
+                printf("addProject,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
-            if(strstr(command, "addGathering") != NULL){
-                printf("addGathering,im %s\n",argv[child_id+1]);
+            else if(strstr(command, "addGathering") != NULL){
+                printf("addGathering,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
-            if(strstr(command, "addBatch") != NULL){
-                printf("addBatch,im %s\n",argv[child_id+1]);
+            else if(strstr(command, "addBatch") != NULL){
+                printf("addBatch,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
-            if(strstr(command, "printSchd") != NULL){
-                printf("printSchd,im %s\n",argv[child_id+1]);
+            else if(strstr(command, "printSchd") != NULL){
+                printf("printSchd,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
+            }
+            else{
+                write(fdtwo[0][1],"ERROR",4);
             }
         }
         
