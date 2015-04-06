@@ -118,6 +118,8 @@ int main(int argc, char *argv[])
                 printf("%d\n",tablepointer );
                 for(readpointer=0;readpointer<tablepointer;readpointer++){
                     for (i = 0; i < sizeof(data[readpointer]); ++i){
+                        if(data[readpointer][i]==NULL)
+                            break;
                         printf("%s ",data[readpointer][i]);
                     }
                     printf("\n");
