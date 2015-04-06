@@ -10,14 +10,14 @@ int main(int argc, char *argv[])
         printf("Number of user between 3-10.\n");
         exit(1);
     }
-        printf("~~WELCOME TO AMR~~\n");
+    printf("~~WELCOME TO AMR~~\n");
     int num_child = argc-1;
-    int i,j;
-    int cid[num_child];
-    int fd[num_child][2];
-    int fdtwo[num_child][2];
+    int i,j,cid[num_child],fd[num_child][2],fdtwo[num_child][2];
+    char bigtimetable[8000][100];
     int ppid = getpid();
     int pid = ppid;
+    int tablepointer = 0;
+    int readpointer;
     int child_id = 0;
     char *username[argc];
     for (i=0; i<num_child; i++) {
@@ -63,9 +63,11 @@ int main(int argc, char *argv[])
                 printf("Bye!");
                 exit(0);
             }
-            int target_child=-1;
+            //Aint target_child=-1;
+            printf("%s",s);
             if(strstr(s, "addStudy") != NULL||strstr(s, "addAssignment") != NULL||strstr(s, "addBatch") != NULL){
-                for (i=0;i<num_child;i++){
+                strcpy(bigtimetable[tablepointer++],s);
+                /*for (i=0;i<num_child;i++){
                     if(strstr(s, argv[i+1]) != NULL){
                         target_child = i;
                     }
@@ -82,10 +84,11 @@ int main(int argc, char *argv[])
                             break;
                         }
                     }
-                }
+                }*/
             }
             else if(strstr(s, "addProject") != NULL||strstr(s, "addGathering") != NULL){
-                for (i=0;i<num_child;i++){
+                strcpy(bigtimetable[tablepointer++],s);
+                /*for (i=0;i<num_child;i++){
                     if(strstr(s, argv[i+1]) != NULL){
                         target_child = i;
                         write(fd[target_child][1],s,100);
@@ -97,10 +100,12 @@ int main(int argc, char *argv[])
                             }
                         }
                     }
-                }
+                }*/
             }
             else if(strstr(s, "printSchd") != NULL){
-                for (i=0;i<num_child;i++){
+                for(readpointer=0;readpointer<tablepointer;readpointer++)
+                printf("%s",bigtimetable[readpointer]);
+                /*for (i=0;i<num_child;i++){
                     target_child = i;
                     write(fd[target_child][1],s,100);
                     while (1) {
@@ -110,7 +115,7 @@ int main(int argc, char *argv[])
                             break;
                         }
                     }
-                }
+                }*/
             }
             else{
                 printf("Command not exist, please try again.\n");
