@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     }
     printf("~~WELCOME TO AMR~~\n");
     int num_child = argc-1;
-    int i,j,cid[num_child],fd[num_child][2],fdtwo[num_child][2];
+    int i,j,k=0,cid[num_child],fd[num_child][2],fdtwo[num_child][2];
     char bigtimetable[8000][100];
     int ppid = getpid();
     int pid = ppid;
@@ -20,8 +20,9 @@ int main(int argc, char *argv[])
     int readpointer;
     int child_id = 0;
 	char* pch;
-	char* data[20];
+	char* data[1000][20];
     char *username[argc];
+	char* spilt[100];
     for (i=0; i<num_child; i++) {
         username[i] = argv[i+1];
         for(j = 0; username[i][j]; j++){
@@ -60,18 +61,13 @@ int main(int argc, char *argv[])
             char *s = (char*) malloc( 100 );
             printf("Please enter appointment:\n");
             fgets(s, 100, stdin);
-			pch=strtok(s," "); //split using whitespace
-			while(pch!=NULL){
-				data[i++]=pch; //store into card array
-				pch = strtok(NULL, " ");
-			}
             //call child
             if(strstr(s, "endProgram") != NULL){
                 printf("Bye!\n");
                 exit(0);
             }
             //Aint target_child=-1;
-            printf("%s",s);
+            //printf("%s",s);
             if(strstr(s, "addStudy") != NULL||strstr(s, "addAssignment") != NULL||strstr(s, "addBatch") != NULL){
                 strcpy(bigtimetable[tablepointer++],s);
                 /*for (i=0;i<num_child;i++){
@@ -110,8 +106,18 @@ int main(int argc, char *argv[])
                 }*/
             }
             else if(strstr(s, "printSchd") != NULL){
-                for(readpointer=0;readpointer<tablepointer;readpointer++)
-                printf("%s",bigtimetable[readpointer]);
+                for(readpointer=0;readpointer<tablepointer;readpointer++){
+                    printf("%s\n",bigtimetable[readpointer]);
+                    pch=strtok(bigtimetable[readpointer]," "); //split using whitespace
+                    k=0;
+                    while(pch!=NULL){
+                        data[readpointer][k++]=pch; //store into data array
+                        printf("%s\n", pch);
+                        pch = strtok (NULL, " ");
+                    }
+                    //printf("%s\n",data[0][k-2] );
+
+                }
                 /*for (i=0;i<num_child;i++){
                     target_child = i;
                     write(fd[target_child][1],s,100);
