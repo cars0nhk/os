@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
     int tablepointer = 0;
     int readpointer;
     int child_id = 0;
+	char* pch;
+	char* data[20];
     char *username[argc];
     for (i=0; i<num_child; i++) {
         username[i] = argv[i+1];
@@ -58,9 +60,14 @@ int main(int argc, char *argv[])
             char *s = (char*) malloc( 100 );
             printf("Please enter appointment:\n");
             fgets(s, 100, stdin);
+			pch=strtok(s," "); //split using whitespace
+			while(pch!=NULL){
+				data[i++]=pch; //store into card array
+				pch = strtok(NULL, " ");
+			}
             //call child
             if(strstr(s, "endProgram") != NULL){
-                printf("Bye!");
+                printf("Bye!\n");
                 exit(0);
             }
             //Aint target_child=-1;
