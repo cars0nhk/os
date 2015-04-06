@@ -148,26 +148,32 @@ int main(int argc, char *argv[])
             char command[80];
             read(fd[child_id][0], command, 80);
             if(strstr(command, "addStudy") != NULL){
+            	printf("-> [Pending]\n");
                 printf("addStudy,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
             else if(strstr(command, "addAssignment") != NULL){
+            	printf("-> [Pending]\n");
                 printf("addAssignment,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
             else if(strstr(command, "addProject") != NULL){
+            	printf("-> [Pending]\n");
                 printf("addProject,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
             else if(strstr(command, "addGathering") != NULL){
+            	printf("-> [Pending]\n");
                 printf("addGathering,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
             else if(strstr(command, "addBatch") != NULL){
+            	printf("-> [Pending]\n");
                 printf("addBatch,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
             else if(strstr(command, "printSchd") != NULL){
+            	printf("-> [Done!]\n");
                 printf("printSchd,im %s\n",username[child_id]);
                 write(fdtwo[0][1],"DONE",4);
             }
