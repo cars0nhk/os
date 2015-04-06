@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
         for(j = 0; username[i][j]; j++){
             username[i][j] = tolower(username[i][j]);
         }
-        username[i][0] = toupper(username[i][0]);
+        //username[i][0] = toupper(username[i][0]);
     }
     //prepare pipe
     for(i=0;i<num_child;i++){
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
                 printf("Bye!\n");
                 exit(0);
             }
-            //Aint target_child=-1;
+            int target_child=-1;
             //printf("%s",s);
             if(strstr(s, "addStudy") != NULL||strstr(s, "addAssignment") != NULL||strstr(s, "addProject") != NULL||strstr(s, "addGathering") != NULL){
                 strcpy(bigtimetable[tablepointer],s);
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
                     pch = strtok (NULL, " ");
                 }
                 tablepointer++;
-                /*for (i=0;i<num_child;i++){
+                for (i=0;i<num_child;i++){
                     if(strstr(s, argv[i+1]) != NULL){
                         target_child = i;
                     }
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
                             break;
                         }
                     }
-                }*/
+                }
             }
             else if(strstr(s, "addBatch") != NULL){
                 printf("AddBatch\n");
